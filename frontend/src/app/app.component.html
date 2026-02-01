@@ -1,0 +1,75 @@
+<nav class="navbar">
+  <div class="logo">Loan Management System</div>
+  <ul class="nav-links">
+     <button mat-raised-button color="accent" (click)="createNewLoan(null)">
+          Create New Loan
+        </button>
+  </ul>
+</nav>
+
+
+
+
+
+
+<div class="mat-elevation-z8" style="margin: 3%;">
+  <table mat-table [dataSource]="dataSource"  class=" striped-table">
+
+  
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="customerName">
+      <th mat-header-cell *matHeaderCellDef> Customer Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.customerName}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="principalAmount">
+      <th mat-header-cell *matHeaderCellDef> Principal Amount </th>
+      <td mat-cell *matCellDef="let element"> {{element.principalAmount}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="interestRate">
+      <th mat-header-cell *matHeaderCellDef> Interest Rate </th>
+      <td mat-cell *matCellDef="let element"> {{element.interestRate+'%'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tenureMonths">
+      <th mat-header-cell *matHeaderCellDef> Tenure </th>
+      <td mat-cell *matCellDef="let element"> {{element.tenureMonths + ' Months'}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="emiAmount">
+      <th mat-header-cell *matHeaderCellDef> EMI </th>
+      <td mat-cell *matCellDef="let element"> {{element.emiAmount | number:'1.2-2'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdDate">
+      <th mat-header-cell *matHeaderCellDef> Created Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.createdDate | date: 'dd-MM-yyyy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nextDueDate">
+      <th mat-header-cell *matHeaderCellDef> Next Due Date </th>
+      <td mat-cell *matCellDef="let element"> {{element.nextDueDate | date: 'dd-MM-yyyy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+    </ng-container>
+
+    <tr mat-header-row  *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row;  columns: displayedColumns;"   (click)="onRowClick(row)"      class="clickable-row"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
+</div>

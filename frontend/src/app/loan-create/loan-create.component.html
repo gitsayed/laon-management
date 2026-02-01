@@ -1,0 +1,62 @@
+<mat-card class="loan-card">
+  <mat-card-header>
+    <mat-card-title style="margin-bottom: 10%;">Create New Loan</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="loanForm" (ngSubmit)="onSubmit()" class="loan-form" *ngIf="!loading; else loadingOrError">
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Customer Name</mat-label>
+        <input matInput formControlName="customerName" placeholder="Enter customer name" />
+        <mat-error *ngIf="f['customerName'].invalid && f['customerName'].touched">
+          Name is required (min 3 characters)
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Principal Amount</mat-label>
+        <input matInput type="number" formControlName="principalAmount" placeholder="Enter amount" />
+        <mat-error *ngIf="f['principalAmount'].invalid && f['principalAmount'].touched">
+          Must be at least 1000
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Interest Rate (%)</mat-label>
+        <input matInput type="number" formControlName="interestRate" placeholder="Enter rate" />
+        <mat-error *ngIf="f['interestRate'].invalid && f['interestRate'].touched">
+          Must be between 1 and 100
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tenure (Months)</mat-label>
+        <input matInput type="number" formControlName="tenureMonths" placeholder="Enter months" />
+        <mat-error *ngIf="f['tenureMonths'].invalid && f['tenureMonths'].touched">
+          Minimum 1 month required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Created Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="createdDate" placeholder="Choose date" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="f['createdDate'].invalid && f['createdDate'].touched">
+          Date is required
+        </mat-error>
+      </mat-form-field>
+
+      <div class="actions">
+          <button mat-stroked-button color="warn" type="reset">Reset</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="loanForm.invalid">Submit</button>
+      
+      </div>
+    </form>
+    <ng-template #loadingOrError>
+  <div *ngIf="loading" class="loading">Loading loan details...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+</ng-template>
+  </mat-card-content>
+</mat-card>

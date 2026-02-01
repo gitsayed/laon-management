@@ -1,0 +1,23 @@
+.loan-card {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.loan-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}

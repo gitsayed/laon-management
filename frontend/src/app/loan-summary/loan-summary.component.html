@@ -1,0 +1,88 @@
+<div class="loan-detail-container" *ngIf="!loading && summary; else loadingOrError">
+  <mat-card class="loan-card-header"  style="width: 95%;">
+    <mat-card-header>
+      <div class="header-left">
+        <mat-card-title>Loan Summary</mat-card-title>
+        <mat-card-subtitle>{{ summary.customerName }}</mat-card-subtitle>
+        <mat-card-subtitle>{{ summary.status }}</mat-card-subtitle>
+      </div>
+
+      <div class="header-right" *ngIf="!formActive && summary.status!='CLOSED'" style="margin-left: 10%;">
+        <button mat-raised-button color="accent" (click)="emiPayment(summary.id)">
+          Pay EMI
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content *ngIf="!formActive">
+      <div class="loan-info">
+        <p><strong>ID:</strong> {{ summary.id }}</p>
+        <p><strong>Customer Name:</strong> {{ summary.customerName }}</p>
+        <p><strong>Principal Amount:</strong> {{ summary.principalAmount }}</p>
+        <p><strong>Interest Rate:</strong> {{ summary.interestRate }}%</p>
+        <p><strong>Interest Amount:</strong> {{ summary.interestAmount | number:'1.2-2'}}</p>
+        <p><strong>Tenure:</strong> {{ summary.tenureMonths }} months</p>
+        <p><strong>EMI Amount:</strong> {{ summary.emiAmount | number:'1.2-2'}}</p>
+        <p><strong>Created Date:</strong> {{ summary.createdDate | date:'dd-MM-yyyy' }}</p>
+        <p><strong>Next Due Date:</strong> {{ summary.nextDueDate | date:'dd-MM-yyyy' }}</p>
+        <p><strong>Total Paid:</strong> {{ summary.totalPaid }}</p>
+        <p><strong>Remaining Balance:</strong> {{ summary.remainingBalance | number:'1.2-2' }}</p>
+        <p><strong>Status:</strong> {{ summary.status }}</p>
+      </div>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+    <mat-card-content *ngIf="formActive">
+      <mat-card-title style="margin-left: 20%; margin-top: 5%;">Add Payment</mat-card-title>
+        <br/> <br/>
+      <mat-card-content>
+        <form [formGroup]="paymentForm" (ngSubmit)="submit()">
+
+    
+
+          <!-- Payment Amount -->
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Amount</mat-label>
+            <input matInput type="number" formControlName="amountPaid">
+            <mat-error *ngIf="paymentForm.get('amountPaid')?.hasError('required')">
+              Amount is required
+            </mat-error>
+            <mat-error *ngIf="paymentForm.get('amountPaid')?.hasError('min')">
+              Amount must be greater than 0
+            </mat-error>
+          </mat-form-field>
+
+          <br/> <br/>
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Payment Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="paymentDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="paymentForm.get('paymentDate')?.hasError('required')">
+              Payment date is required
+            </mat-error>
+          </mat-form-field>
+
+       
+
+          <div class="actions">
+             <button mat-stroked-button type="button" (click)="paymentForm.reset()">Reset</button> <span></span>
+            <button mat-raised-button color="primary" type="submit">Submit Payment</button>
+           
+          </div>
+
+        </form>
+      </mat-card-content>
+
+
+    </mat-card-content>
+
+  </mat-card>
+</div>
+
+<ng-template #loadingOrError>
+  <div *ngIf="loading" class="loading">Loading loan details...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+</ng-template>
