@@ -13,4 +13,5 @@ public interface LoanProjection {
     Integer getTenureMonths();
     LocalDate getCreatedDate();
     LocalDate getNextDueDate();
+
 }
