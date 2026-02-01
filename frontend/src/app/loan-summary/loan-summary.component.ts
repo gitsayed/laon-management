@@ -82,7 +82,7 @@ export class LoanSummaryComponent {
   formInit(): void {
     this.paymentForm = this.formBuilder.group({
       loanId: [this.loanId, Validators.required],
-      amountPaid: [null, [Validators.required, Validators.min(1)]],
+      amountPaid: [this.summary.emiAmount , [Validators.required, Validators.min(1)]],
       paymentDate: [null, Validators.required],
     });
   }
