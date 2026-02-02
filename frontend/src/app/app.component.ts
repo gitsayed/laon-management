@@ -12,16 +12,18 @@ import { LoanCreateComponent } from './loan-create/loan-create.component';
 
 @Component({
   selector: 'app-root',
-  imports: [MatToolbarModule, CommonModule, MatButtonModule, MatTableModule, MatPaginatorModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  standalone: false,
 })
 export class AppComponent implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['id', 'customerName', 'principalAmount', 'interestRate',
     'tenureMonths', 'emiAmount', 'createdDate', 'nextDueDate', 'status'];
   dataSource = new MatTableDataSource<PeriodicElement>([]);
   totalItems = 0;
-  pageSize = 10;
+  page = 0;
+  size = 10;
+
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   readonly dialog = inject(MatDialog);
@@ -34,31 +36,26 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    let map: Map<string, any> = new Map();
-    map.set('page', 0);
-    map.set('size', this.pageSize);
-    this.loadLoans(map);
-
-    this.paginator.page.subscribe((event: PageEvent) => {
-      let map2: Map<string, any> = new Map();
-      map2.set('page', event.pageIndex);
-      map2.set('size', event.pageSize);
-      this.loadLoans(map2);
-    });
+    this.loadLoans();
   }
 
-  loadLoans(map: Map<string, any>) {
+  loadLoans(map?: Map<string, any>) {
     map = map ? map : new Map();
-    this.loanService.fetchPagedLoan(map).subscribe((response: any) => {
+    map.set('page', this.page);
+    map.set('size', this.size);
+    this.loanService.fetchPagedLoan(map).subscribe({next:(response: any) => {
       this.dataSource.data = response.content;
       this.totalItems = response.totalElements;
-    });
+    },
+    error: err=> {
+      console.log(err.message);
+      
+    }
+  });
 
   }
 
   onRowClick(event: any) {
-    console.log('onRowClick ', event);
     const dialogRef = this.dialog.open(LoanSummaryComponent, {
       data: { loanId: event.id },
       autoFocus: true,
@@ -73,7 +70,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   }
 
 
-    createNewLoan(event: any) {
+  createNewLoan(event: any) {
     console.log('createNewLoan ', event);
     const dialogRef = this.dialog.open(LoanCreateComponent, {
       data: { loanId: null },
@@ -88,7 +85,11 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   }
 
-
+  onPageChange(event: PageEvent): void {
+    this.page = event.pageIndex;
+    this.size = event.pageSize
+    this.loadLoans();
+  }
 
 
 

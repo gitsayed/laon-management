@@ -9,7 +9,7 @@ import { DatePipe } from '@angular/common';
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
   provideHttpClient(),
-DatePipe,
-    provideNativeDateAdapter() ,
+    DatePipe,
+  provideNativeDateAdapter(),
   provideRouter(routes)]
 };
